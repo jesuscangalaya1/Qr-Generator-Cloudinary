@@ -2,9 +2,10 @@ package com.qrgenerator.controller;
 
 import com.cloudinary.Cloudinary;
 import com.google.zxing.WriterException;
+import com.qrgenerator.dto.StudentRequest;
+import com.qrgenerator.dto.StudentResponse;
 import com.qrgenerator.entity.Student;
-import com.qrgenerator.service.StudentService;
-import com.qrgenerator.util.QRCodeGenerator;
+import com.qrgenerator.service.impl.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +20,19 @@ import java.util.List;
 public class StudentController {
 
     private final StudentService studentService;
-    private final Cloudinary cloudinary;
 
     @GetMapping
-    public ResponseEntity<List<Student>> getStudents() throws IOException, WriterException {
+    public ResponseEntity<List<StudentResponse>> getStudents() {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student){
+    public ResponseEntity<StudentResponse> addStudent(@RequestBody StudentRequest student) throws IOException, WriterException {
         return new ResponseEntity<>(studentService.addStudent(student), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Student> findById(@PathVariable("id") Long id){
+    public ResponseEntity<StudentResponse> findById(@PathVariable("id") Long id) {
         return new ResponseEntity<>(studentService.findById(id), HttpStatus.OK);
     }
 
